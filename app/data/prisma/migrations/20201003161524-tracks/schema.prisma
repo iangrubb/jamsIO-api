@@ -1,0 +1,24 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id  Int   @id @default(autoincrement())
+  spotifyId String
+  username String
+  email String
+  password String
+}
+
+model Track {
+  id Int @id @default(autoincrement())
+  spotifyId String
+}

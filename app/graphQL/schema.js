@@ -5,7 +5,7 @@ module.exports = `
     }
 
     type Mutation {
-        
+
     }
 
     type Subscription {
@@ -35,7 +35,6 @@ module.exports = `
         tracks_added: [Track!]!,
         tracks_removed: [Track!]!
     }
-
 
 
 `
