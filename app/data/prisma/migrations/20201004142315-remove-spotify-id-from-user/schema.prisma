@@ -4,12 +4,13 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model User {
   id              Int              @id @default(autoincrement())
-  username        String           @unique
+  username        String
+  email           String
   password        String
   createdAt       DateTime         @default(now())
   followsReceived Follow[]         @relation("ReceivedBy")

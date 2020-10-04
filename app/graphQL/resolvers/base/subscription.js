@@ -1,5 +1,5 @@
 module.exports = {
-    Track: {
+    Subscription: {
         
     }
 }
