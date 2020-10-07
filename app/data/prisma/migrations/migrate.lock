@@ -9,3 +9,6 @@
 20201003184228-adds-created-at
 20201004142315-remove-spotify-id-from-user
 20201004160248-remove-email-from-user
+20201007125332-adds-playlists-and-playlist-tracks
+20201007130903-updates-playlist-to-many-one
+20201007131303-rename-playlist-update-table

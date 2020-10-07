@@ -4,19 +4,19 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model User {
-  id              Int          @id @default(autoincrement())
-  username        String       @unique
+  id              Int              @id @default(autoincrement())
+  username        String           @unique
   password        String
-  createdAt       DateTime     @default(now())
-  followsReceived Follow[]     @relation("ReceivedBy")
-  followsMade     Follow[]     @relation("MadeBy")
-  jamsUpdates     JamsUpdate[]
+  createdAt       DateTime         @default(now())
+  followsReceived Follow[]         @relation("ReceivedBy")
+  followsMade     Follow[]         @relation("MadeBy")
   playRecords     PlayRecord[]
-  playlist        Playlist[]
+  Playlist        Playlist[]
+  playlistUpdates PlaylistUpdate[]
 }
 
 model Follow {
@@ -45,7 +45,7 @@ model Track {
   trackRemovals  TrackRemoval[]
 }
 
-model JamsUpdate {
+model PlaylistUpdate {
   id             Int             @id @default(autoincrement())
   userId         Int
   createdAt      DateTime        @default(now())
@@ -55,26 +55,27 @@ model JamsUpdate {
 }
 
 model TrackAddition {
-  id           Int        @id @default(autoincrement())
-  trackId      Int
-  jamsUpdateId Int
-  jamsUpdate   JamsUpdate @relation(fields: [jamsUpdateId], references: [id])
-  track        Track      @relation(fields: [trackId], references: [id])
+  id               Int            @id @default(autoincrement())
+  trackId          Int
+  playlistUpdateId Int
+  playlistUpdate   PlaylistUpdate @relation(fields: [playlistUpdateId], references: [id])
+  track            Track          @relation(fields: [trackId], references: [id])
 }
 
 model TrackRemoval {
-  id           Int        @id @default(autoincrement())
-  trackId      Int
-  jamsUpdateId Int
-  jamsUpdate   JamsUpdate @relation(fields: [jamsUpdateId], references: [id])
-  track        Track      @relation(fields: [trackId], references: [id])
+  id               Int            @id @default(autoincrement())
+  trackId          Int
+  playlistUpdateId Int
+  playlistUpdate   PlaylistUpdate @relation(fields: [playlistUpdateId], references: [id])
+  track            Track          @relation(fields: [trackId], references: [id])
 }
 
 model Playlist {
-  id         Int      @id @default(autoincrement())
-  name       String
-  userId     Int
-  spotify_id String
-  createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
+  id            Int             @id @default(autoincrement())
+  spotify_id    String
+  name          String
+  userId        Int
+  user          User            @relation(fields: [userId], references: [id])
+  createdAt      DateTime        @default(now())
 }
+
