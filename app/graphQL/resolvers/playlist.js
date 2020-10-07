@@ -1,5 +1,5 @@
 module.exports = {
-    PlaylistUpdate: {
+    Playlist: {
         
     }
 }

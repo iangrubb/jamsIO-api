@@ -9,8 +9,9 @@ const MutationResolvers = require('./resolvers/base/mutation')
 const SubscriptionResolvers = require('./resolvers/base/subscription')
 
 const TrackResolvers = require('./resolvers/track')
-const PlaylistUpdateResolvers = require('./resolvers/playlistUpdate')
+const JamsUpdateResolvers = require('./resolvers/jamsUpdate')
 const UserResolvers = require('./resolvers/user')
+const PlaylistResolvers = require('./resolvers/playlist')
 
 
 const resolvers = {
@@ -18,8 +19,9 @@ const resolvers = {
     ...MutationResolvers,
     ...SubscriptionResolvers,
     ...TrackResolvers,
-    ...PlaylistUpdateResolvers,
-    ...UserResolvers
+    ...JamsUpdateResolvers,
+    ...UserResolvers,
+    ...PlaylistResolvers
 }
 
 const schema = makeExecutableSchema({typeDefs, resolvers})
@@ -51,6 +53,5 @@ const context = ({ req }) => {
     }
 
 }
-
 
 module.exports = new ApolloServer({ schema, context });

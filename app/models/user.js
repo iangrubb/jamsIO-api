@@ -4,6 +4,10 @@ const jwt = require('jsonwebtoken')
 
 module.exports = class User {
 
+    static findAll = async ({ prisma }) => {
+        return await prisma.user.findMany()
+    }
+
     static genrateToken = (user) => {
         return jwt.sign(
             { userId: user.id },
@@ -11,9 +15,12 @@ module.exports = class User {
         )
     }
 
-    static login = async ({ prisma, currentUserId }, { username, password }) => {
+    static autoLogin = async ({ prisma, currentUserId }) =>  {
+        const user = await prisma.user.findOne({where: {id: currentUserId}})
+        return user
+    }
 
-        console.log(currentUserId)
+    static login = async ({ prisma }, { username, password }) => {
 
         const user = await prisma.user.findOne({ where: { username } })
 

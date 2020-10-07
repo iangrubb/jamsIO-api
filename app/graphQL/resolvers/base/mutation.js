@@ -8,5 +8,8 @@ module.exports = {
         login: (_parent, args, context) => {
             return User.login(context, args)
         },
+        autoLogin: (_parent, _args, context) => {
+            return User.autoLogin(context)
+        }
     }
 }

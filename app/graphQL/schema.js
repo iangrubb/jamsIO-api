@@ -1,12 +1,20 @@
 module.exports = `
 
     type Query {
-        test: User
+        user(id: ID!): User,
+        users: [User!]!,
+        searchTracks(searchTerm: String!): [Track!]!
     }
 
     type Mutation {
         signup(username: String!, password: String!): AuthPayload,
-        login(username: String!, password: String!): AuthPayload
+        login(username: String!, password: String!): AuthPayload,
+        autoLogin(token: String!): User,
+
+        updateJams(additions: [String!], removals: [String!] ): User,
+
+        followUser(followeeID: ID!): User
+
     }
 
     type Subscription {
@@ -20,8 +28,9 @@ module.exports = `
         followerCount: Int!,
         followees(limit: Int, after: ID): [User!]!,
         followeeCount: Int!,
-        currentPlaylist: [Track!]!,
-        trackHistory(limit: Int, after: ID): [Track!]!
+        currentJams: [Track!]!,
+        jamsUpdates: [JamsUpdate!]!,
+        playHistory(limit: Int, after: ID): [Track!]!
     }
 
     type AuthPayload {
@@ -30,14 +39,20 @@ module.exports = `
     }
 
     type Track {
-        id: ID!,
+        id: ID,
         spotifyId: String!
     }
 
-    type PlaylistUpdate {
+    type Playlist {
         id: ID!,
-        tracks_added: [Track!]!,
-        tracks_removed: [Track!]!
+        spotifyId: String!,
+        user: User!
+    }
+
+    type JamsUpdate {
+        id: ID!,
+        tracksAdded: [Track!]!,
+        tracksRemoved: [Track!]!
     }
 
 
