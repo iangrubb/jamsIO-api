@@ -8,6 +8,8 @@ const QueryResolvers = require('./resolvers/base/query')
 const MutationResolvers = require('./resolvers/base/mutation')
 const SubscriptionResolvers = require('./resolvers/base/subscription')
 
+const DateTimeResolver = require('./resolvers/scalars/DateTime')
+
 const TrackResolvers = require('./resolvers/track')
 const JamsUpdateResolvers = require('./resolvers/jamsUpdate')
 const UserResolvers = require('./resolvers/user')
@@ -18,6 +20,7 @@ const resolvers = {
     ...QueryResolvers,
     ...MutationResolvers,
     ...SubscriptionResolvers,
+    ...DateTimeResolver,
     ...TrackResolvers,
     ...JamsUpdateResolvers,
     ...UserResolvers,
@@ -45,9 +48,12 @@ const authenticate = require('./authenticate')
 const context = ({ req }) => {
 
     const currentUserId = authenticate(req)
+
+    // Add access token in Header, attach here if found
+    // spotifyApi.setAccessToken('<your_access_token>')
     
     return {
-        // spotifyAPI,
+        spotifyAPI,
         prisma: new PrismaClient(),
         currentUserId
     }

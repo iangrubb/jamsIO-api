@@ -1,5 +1,7 @@
 module.exports = `
 
+    scalar DateTime
+
     type Query {
         user(id: ID!): User,
         users: [User!]!,
@@ -9,16 +11,30 @@ module.exports = `
     type Mutation {
         signup(username: String!, password: String!): AuthPayload,
         login(username: String!, password: String!): AuthPayload,
-        autoLogin(token: String!): User,
+        autoLogin(token: String!): AuthPayload,
+        authenticateSpotify(code: String!): SpotifyPayload,
+        refreshSpotify(token: String!): SpotifyPayload,
 
-        updateJams(additions: [String!], removals: [String!] ): User,
+        updateJams(additions: [String!], removals: [String!] ): JamsUpdate,
 
-        followUser(followeeID: ID!): User
-
+        followUser(followeeID: ID!): User,
+        unfollowUser(followeeId: ID!): ID
     }
 
     type Subscription {
         test: User
+    }
+
+    type AuthPayload {
+        user: User,
+        token: String,
+        authUrl: String
+    }
+
+    type SpotifyPayload {
+        accessToken: String,
+        refreshToken: String,
+        expiresAt: DateTime
     }
 
     type User {
@@ -31,11 +47,6 @@ module.exports = `
         currentJams: [Track!]!,
         jamsUpdates: [JamsUpdate!]!,
         playHistory(limit: Int, after: ID): [Track!]!
-    }
-
-    type AuthPayload {
-        user: User,
-        token: String
     }
 
     type Track {
@@ -54,6 +65,5 @@ module.exports = `
         tracksAdded: [Track!]!,
         tracksRemoved: [Track!]!
     }
-
 
 `
