@@ -1,6 +1,42 @@
+const { repeat } = require("../graphQL/schema")
+const { refreshSpotify } = require("./user")
+
 module.exports = class Track {
 
-    static search = async ({ searchTerm }, { spotifyAPI })  => {
+    static convertSpotifyArtist = resp => {
+        return {
+            spotifyId: resp.id,
+            name: resp.name
+        }
+    }
+
+    static convertSpotifyAlbum = resp => {
+        return {
+            spotifyId: resp.id,
+            name: resp.name,
+            smallImageUrl: resp.images.find(i => i.height === 64).url,
+            mediumImageUrl: resp.images.find(i => i.height === 300).url,
+            largeImageUrl: resp.images.find(i => i.height === 640).url
+        }
+    }
+
+    static convertSpotifyTrack = resp => {
+        return {
+            spotifyId: resp.id,
+            duration: resp.duration_ms,
+            name: resp.name,
+            album: this.convertSpotifyAlbum(resp.album),
+            artists: resp.artists.map(this.convertSpotifyArtist)
+        }
+    }
+
+    static search = async ({ searchTerm }, { spotifyApi })  => {
+
+        return spotifyApi.searchTracks(searchTerm)
+        .then(data => {
+            const trackData = data.body.tracks.items
+            return trackData.map(this.convertSpotifyTrack)
+        }, error => console.log(error))
 
 
 

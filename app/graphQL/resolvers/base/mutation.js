@@ -1,7 +1,6 @@
 const User = require('../../../models/user')
 const Jams = require('../../../models/jams')
 const Follow = require('../../../models/follow')
-const { compareSync } = require('bcryptjs')
 
 module.exports = {
     Mutation: {
@@ -16,6 +15,9 @@ module.exports = {
         },
         authenticateSpotify: (_parent, args, context) => {
             return User.authenticateSpotify(context, args)
+        },
+        refreshSpotify: (_parent, args, context) => {
+            return User.refreshSpotify(context, args)
         },
         updateJams: (_parent, args, context) => {
             return Jams.update(args, context)

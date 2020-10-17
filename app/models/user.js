@@ -1,16 +1,15 @@
 
-
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const makeAuthUrl = spotifyAPI => {
+const makeAuthUrl = spotifyApi => {
     const scopes = ['user-read-private', 'user-read-email']
 
     const state = 'secure-this-state'
 
     const showDialog = true
 
-    return spotifyAPI.createAuthorizeURL(scopes, state, showDialog);
+    return spotifyApi.createAuthorizeURL(scopes, state, showDialog);
 }
 
 module.exports = class User {
@@ -26,13 +25,12 @@ module.exports = class User {
         )
     }
 
-    static authenticateSpotify = async ({ spotifyAPI }, { code }) => {
-
-        return spotifyAPI.authorizationCodeGrant(code).then(
+    static authenticateSpotify = async ({ spotifyApi }, { code }) => {
+        return spotifyApi.authorizationCodeGrant(code).then(
             data => {
                 return {
                     accessToken: data.body['access_token'], refreshToken: data.body['refresh_token'],
-                    expiresIn: data.body['expires_in']
+                    expiresAt: new Date(Date.now() + (data.body['expires_in'] * 1000))
                 }
             },
             error => {
@@ -41,17 +39,30 @@ module.exports = class User {
         )        
     }
 
-    static autoLogin = async ({ prisma, spotifyAPI, currentUserId }) =>  {
-        const user = await prisma.user.findOne({where: {id: currentUserId}})
+    static refreshSpotify = async ({ spotifyApi }, { token }) => {
 
-        const token = User.generateToken(user)
-
-        const authUrl = makeAuthUrl(spotifyAPI)
-
-        return { user, token, authUrl }
+        spotifyApi.setRefreshToken(token)
+                
+        return spotifyApi.refreshAccessToken().then(
+            data => {
+                return {
+                    accessToken: data.body['access_token'],
+                    expiresAt: new Date(Date.now() + (data.body['expires_in'] * 1000))
+                }
+            },
+            error => {
+                // Handle error refreshing token
+                console.log(error)
+            }
+        );
     }
 
-    static login = async ({ prisma, spotifyAPI }, { username, password }) => {
+    static autoLogin = async ({ prisma, currentUserId }) =>  {
+        const user = await prisma.user.findOne({where: {id: currentUserId}})
+        return user
+    }
+
+    static login = async ({ prisma, spotifyApi }, { username, password }) => {
 
         const user = await prisma.user.findOne({ where: { username } })
 
@@ -66,13 +77,13 @@ module.exports = class User {
 
         const token = User.generateToken(user)
 
-        const authUrl = makeAuthUrl(spotifyAPI)
+        const authUrl = makeAuthUrl(spotifyApi)
 
         return { user, token, authUrl }
 
     }
 
-    static signup = async ({ prisma, spotifyAPI }, { username, password }) => {
+    static signup = async ({ prisma, spotifyApi }, { username, password }) => {
 
         const encryptedPassword = await bcrypt.hash(password, 10)
 
@@ -83,7 +94,7 @@ module.exports = class User {
 
         const token = User.generateToken(user)
 
-        const authUrl = makeAuthUrl(spotifyAPI)
+        const authUrl = makeAuthUrl(spotifyApi)
 
         return { user, token, authUrl }
     }
