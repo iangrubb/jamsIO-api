@@ -3,7 +3,7 @@ module.exports = `
     scalar Date
 
     type Query {
-        user(id: ID!): User,
+        currentUser: User,
         searchTracks(searchTerm: String!): [Track!]!
     }
 

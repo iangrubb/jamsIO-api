@@ -33,7 +33,7 @@ const { PrismaClient } = require('@prisma/client')
 
 const makeSpotifyApi = require('../data/spotifyApi')
 
-
+const configureMongo = require('../data/mongo')
 
 const authenticate = require('./authenticate')
 
@@ -52,6 +52,7 @@ const context = ({ req }) => {
     return {
         spotifyApi,
         prisma: new PrismaClient(),
+        mongo: configureMongo(),
         currentUserId
     }
 
