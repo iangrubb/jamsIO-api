@@ -61,8 +61,7 @@ module.exports = `
     }
 
     type Track {
-        id: ID,
-        spotifyId: String!,
+        id: ID!,
         duration: Int,
         name: String,
         album: Album,
@@ -70,12 +69,12 @@ module.exports = `
     }
 
     type Artist {
-        spotifyId: String!,
+        id: ID!,
         name: String
     }
 
     type Album {
-        spotifyId: String!,
+        id: ID!,
         name: String,
         smallImageUrl: String,
         mediumImageUrl: String,
