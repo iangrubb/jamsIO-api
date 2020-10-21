@@ -1,0 +1,49 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "DeleteModel",
+      "model": "Track"
+    },
+    {
+      "tag": "DeleteModel",
+      "model": "PlayRecord"
+    },
+    {
+      "tag": "DeleteModel",
+      "model": "Playlist"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "User",
+      "field": "playRecords"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "User",
+      "field": "playlist"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "TrackAddition",
+      "field": "track"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "TrackAddition",
+      "field": "trackId",
+      "type": "String"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "TrackRemoval",
+      "field": "track"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "TrackRemoval",
+      "field": "trackId",
+      "type": "String"
+    }
+  ]
+}

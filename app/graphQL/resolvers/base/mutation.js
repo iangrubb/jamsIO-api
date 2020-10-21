@@ -20,13 +20,13 @@ module.exports = {
             return User.refreshSpotify(context, args)
         },
         updateJams: (_parent, args, context) => {
-            return Jams.update(args, context)
+            return Jams.update(context, args)
         },
         followUser: (_parent, args, context) => {
-            return Follow.add(args, context)
+            return Follow.add(context, args)
         },
         unfollowUser: (_parent, args, context) => {
-            return Follow.remove(args, context)
+            return Follow.remove(context, args)
         }
     }
 }

@@ -2,8 +2,10 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+const Track = require('./track');
+
 const makeAuthUrl = spotifyApi => {
-    const scopes = ['user-read-private', 'user-read-email']
+    const scopes = ['user-read-private']
 
     const state = 'secure-this-state'
 
@@ -16,6 +18,10 @@ module.exports = class User {
 
     static findAll = async ({ prisma }) => {
         return await prisma.user.findMany()
+    }
+
+    static current = async ({ currentUserId, prisma }) => {
+        return await prisma.user.findOne({where: {id: currentUserId}})
     }
 
     static generateToken = (user) => {
@@ -83,7 +89,7 @@ module.exports = class User {
 
     }
 
-    static signup = async ({ prisma, spotifyApi }, { username, password }) => {
+    static signup = async ({ prisma, spotifyApi, mongo }, { username, password }) => {
 
         const encryptedPassword = await bcrypt.hash(password, 10)
 
@@ -92,11 +98,28 @@ module.exports = class User {
             password: encryptedPassword
         }})
 
+        const mongoUser = new mongo.User({_id: user.id, currentJamIds: []})
+
+        await mongoUser.save()
+
         const token = User.generateToken(user)
 
         const authUrl = makeAuthUrl(spotifyApi)
 
         return { user, token, authUrl }
+    }
+
+    static currentJams = async ({ mongo, spotifyApi }, user) => {
+
+        const mongoUser = await mongo.User.findById(user.id)
+
+        const trackIds = mongoUser.currentJamIds
+
+        if (trackIds.length === 0) {
+            return []
+        } else {
+            return Track.getFullData({ spotifyApi }, trackIds)
+        }
     }
 
 }

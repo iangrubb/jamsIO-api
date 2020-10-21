@@ -1,12 +1,35 @@
+
 module.exports = class Jams {
 
-    static update = async ({ additions, removals }, { prisma, currentUserId }) => {
+    static update = async ({ prisma, mongo, currentUserId }, { additions, removals }) => {
 
-        //  Validate: check that additions aren't on list, removals are on list, and there won't be more than 10 jams.
+        const currentUser = await mongo.User.findById(currentUserId)
 
-        // Create new update with many removals and many additions. (Should be prisma support for this.)
+        const newJamIds = 
+            currentUser.currentJamIds
+            .filter(id => !removals.find(r => r === id))
+            .concat(additions)
 
-        // return the jams update
+        const jamsUpdate = await prisma.jamsUpdate.create({
+            data: {
+                user: {
+                    connect: { id: currentUserId },
+                },
+                trackAdditions: {
+                    create: additions.map(id => ({trackId: id}))
+                },
+                trackRemovals: {
+                    create: removals.map(id => ({trackId: id}))
+                }
+            },
+            include: {trackAdditions: true, trackRemovals: true}
+        })
 
+        await mongo.User.updateOne(
+            {_id: currentUserId},
+            {currentJamIds: newJamIds}
+        )
+
+        return jamsUpdate
     }
 }

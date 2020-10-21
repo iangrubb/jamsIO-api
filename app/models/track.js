@@ -30,6 +30,11 @@ module.exports = class Track {
         }
     }
 
+    static getFullData = async ({ spotifyApi }, ids) => {
+        const resp = await spotifyApi.getTracks(ids)
+        return resp.body.tracks.map(this.convertSpotifyTrack)
+    }
+
     static search = async ({ searchTerm }, { spotifyApi })  => {
 
         return spotifyApi.searchTracks(searchTerm)
@@ -40,14 +45,6 @@ module.exports = class Track {
             return trackData.map(this.convertSpotifyTrack)
         }, error => console.log(error))
 
-
-
-        // Hit spotify endpoint and return tracks 
-
     }
-
-
-    // Write a method to fetch tracks with info. Figure out which info should be stored in db and which should be fetched each time from spotify.
-
 
 }

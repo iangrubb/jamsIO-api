@@ -14,7 +14,7 @@ module.exports = `
         authenticateSpotify(code: String!): SpotifyPayload,
         refreshSpotify(token: String!): SpotifyPayload,
 
-        updateJams(additions: [String!], removals: [String!] ): JamsUpdate,
+        updateJams(additions: [String!], removals: [String!]): JamsUpdate,
 
         followUser(followeeID: ID!): User,
         unfollowUser(followeeId: ID!): ID
@@ -50,14 +50,13 @@ module.exports = `
 
     type Playlist {
         id: ID!,
-        spotifyId: String!,
         user: User!
     }
 
     type JamsUpdate {
         id: ID!,
-        tracksAdded: [Track!]!,
-        tracksRemoved: [Track!]!
+        additions: [Track!]!,
+        removals: [Track!]!
     }
 
     type Track {
