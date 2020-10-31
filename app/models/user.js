@@ -16,8 +16,23 @@ const makeAuthUrl = spotifyApi => {
 
 module.exports = class User {
 
-    static findAll = async ({ prisma }) => {
-        return await prisma.user.findMany()
+    static browse = async ({prisma}, { searchTerm }) => {
+
+        if (searchTerm) {
+            return prisma.user.findMany({
+                where: {
+                    username: {
+                        contains: searchTerm,
+                        mode: "insensitive",
+                    }},
+                take: 20
+            })
+        } else {
+            return prisma.user.findMany({
+                take: 20
+            })
+        }
+
     }
 
     static current = async ({ currentUserId, prisma }) => {
@@ -27,7 +42,7 @@ module.exports = class User {
     static generateToken = (user) => {
         return jwt.sign(
             { userId: user.id },
-            process.env.USER_LOGIN_SECRET
+            process.env.USER_LOGIN_SECRET || "Test"
         )
     }
 
@@ -64,6 +79,7 @@ module.exports = class User {
     }
 
     static autoLogin = async ({ prisma, currentUserId }) =>  {
+        
         const user = await prisma.user.findOne({where: {id: currentUserId}})
         return user
     }
@@ -98,9 +114,10 @@ module.exports = class User {
             password: encryptedPassword
         }})
 
-        const mongoUser = new mongo.User({_id: user.id, currentJamIds: []})
-
+        const mongoUser = new mongo.User({_id: user.id, currentJamIds: [], notifications: [], listenedTrackIds: []})
+        
         await mongoUser.save()
+        
 
         const token = User.generateToken(user)
 

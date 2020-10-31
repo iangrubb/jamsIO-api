@@ -4,7 +4,8 @@ module.exports = `
 
     type Query {
         currentUser: User,
-        searchTracks(searchTerm: String!): [Track!]!
+        searchTracks(searchTerm: String!): [Track!]!,
+        browseUsers(searchTerm: String): [User!]!
     }
 
     type Mutation {

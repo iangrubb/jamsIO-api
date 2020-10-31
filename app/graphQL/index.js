@@ -42,13 +42,13 @@ const context = ({ req }) => {
     const currentUserId = authenticate(req)
 
     const accessToken = req.get('X-access-token')
-
+    
     const spotifyApi = makeSpotifyApi()
 
     if (accessToken) {
         spotifyApi.setAccessToken(accessToken)
     }
-    
+
     return {
         spotifyApi,
         prisma: new PrismaClient(),
