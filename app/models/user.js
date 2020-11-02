@@ -32,7 +32,6 @@ module.exports = class User {
                 take: 20
             })
         }
-
     }
 
     static current = async ({ currentUserId, prisma }) => {

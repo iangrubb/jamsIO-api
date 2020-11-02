@@ -12,18 +12,9 @@ model User {
   username        String       @unique
   password        String
   createdAt       DateTime     @default(now())
-  followsReceived Follow[]     @relation("ReceivedBy")
-  followsMade     Follow[]     @relation("MadeBy")
+  followedBy      User[]       @relation("UserFollows", references:[id])
+  following       User[]       @relation("UserFollows", references:[id])
   jamsUpdates     JamsUpdate[]
-}
-
-model Follow {
-  id         Int      @id @default(autoincrement())
-  followerId Int
-  followeeId Int
-  createdAt  DateTime @default(now())
-  followee   User     @relation("ReceivedBy", fields: [followeeId], references: [id])
-  follower   User     @relation("MadeBy", fields: [followerId], references: [id])
 }
 
 model JamsUpdate {

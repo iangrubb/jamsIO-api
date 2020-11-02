@@ -1,15 +1,3 @@
 # Prisma Migrate lockfile v1
 
-20201003160949-users
-20201003161524-tracks
-20201003165045-add-play-records
-20201003165423-adds-playlist-updates
-20201003170332-adds-track-additions-and-removals
-20201003172419-adds-follows
-20201003184228-adds-created-at
-20201004142315-remove-spotify-id-from-user
-20201004160248-remove-email-from-user
-20201007125332-adds-playlists-and-playlist-tracks
-20201007130903-updates-playlist-to-many-one
-20201007131303-rename-playlist-update-table
-20201020215846-removes-several-tables
+20201031205236-database

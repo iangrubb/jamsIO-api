@@ -17,7 +17,7 @@ module.exports = `
 
         updateJams(additions: [String!], removals: [String!]): JamsUpdate,
 
-        followUser(followeeID: ID!): User,
+        followUser(followeeID: ID!): ID,
         unfollowUser(followeeId: ID!): ID
     }
 
