@@ -138,4 +138,25 @@ module.exports = class User {
         }
     }
 
+    static followerCount = async (user, prisma) => {
+        
+        const count = await prisma.user.findOne({
+            where: {id: user.id}
+        }).followedBy()
+
+        return count.length
+
+    }
+
+    static followeeCount = async (user, prisma) => {
+
+        const count = await prisma.user.findOne({
+            where: {id: user.id}
+        }).following()
+
+        return count.length
+
+
+    }
+
 }

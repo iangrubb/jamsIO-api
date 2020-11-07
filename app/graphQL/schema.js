@@ -45,8 +45,7 @@ module.exports = `
         followees(limit: Int, after: ID): [User!]!,
         followeeCount: Int!,
         currentJams: [Track!]!,
-        jamsUpdates: [JamsUpdate!]!,
-        playHistory(limit: Int, after: ID): [Track!]!
+        jamsUpdates: [JamsUpdate!]!
     }
 
     type Playlist {
