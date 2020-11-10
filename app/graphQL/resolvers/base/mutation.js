@@ -23,10 +23,10 @@ module.exports = {
             return Jams.update(context, args)
         },
         followUser: (_parent, args, context) => {
-            return Follow.add(context, args)
+            return Follow.add(context, {followeeId: parseInt(args.followeeId)})
         },
         unfollowUser: (_parent, args, context) => {
-            return Follow.remove(context, args)
+            return Follow.remove(context, {followeeId: parseInt(args.followeeId)})
         }
     }
 }

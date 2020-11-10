@@ -25,11 +25,11 @@ module.exports = class User {
                         contains: searchTerm,
                         mode: "insensitive",
                     }},
-                take: 20
+                take: 15
             })
         } else {
             return prisma.user.findMany({
-                take: 20
+                take: 15
             })
         }
     }
@@ -156,7 +156,28 @@ module.exports = class User {
 
         return count.length
 
+    }
 
+    static followsUserWithId = async (user, otherUserId, prisma) => {
+
+        const response =
+            await prisma.user
+            .findOne({where: {id: otherUserId}})
+            .followedBy({where: {id: user.id}})
+        
+        return response.length > 0
+        
+    }
+
+    static followedByUserWithId = async (user, otherUserId, prisma) => {
+            
+        const response =
+            await prisma.user
+            .findOne({where: {id: user.id}})
+            .followedBy({where: {id: otherUserId}})
+        
+        return response.length > 0
+        
     }
 
 }

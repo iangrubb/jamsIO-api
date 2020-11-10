@@ -17,8 +17,8 @@ module.exports = `
 
         updateJams(additions: [String!], removals: [String!]): JamsUpdate,
 
-        followUser(followeeID: ID!): ID,
-        unfollowUser(followeeId: ID!): ID
+        followUser(followeeId: ID!): User,
+        unfollowUser(followeeId: ID!): User
     }
 
     type Subscription {
@@ -45,7 +45,9 @@ module.exports = `
         followees(limit: Int, after: ID): [User!]!,
         followeeCount: Int!,
         currentJams: [Track!]!,
-        jamsUpdates: [JamsUpdate!]!
+        jamsUpdates: [JamsUpdate!]!,
+        followsUser(userId: ID!): Boolean!,
+        followedByUser(userId: ID!): Boolean!
     }
 
     type Playlist {

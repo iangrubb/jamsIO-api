@@ -98,8 +98,8 @@ const seedData = async () => {
     await Promise.all(users.flatMap(followingUser => (
         randomSubset(users, 0.2).map(followedUser => (
             Follow.add(
-                { followeeId: followedUser.id },
-                { prisma, currentUserId: followingUser.id}
+                { prisma, currentUserId: followingUser.id},
+                { followeeId: followedUser.id }
             )
         ))
     )))

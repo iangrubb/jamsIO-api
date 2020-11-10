@@ -1,10 +1,8 @@
+const { compareSync } = require("bcryptjs")
+
 module.exports = class Follow {
 
-    static add = async ({ followeeId }, { prisma, currentUserId }) => {
-
-        // Check that follow doesn't exist yet, add one if it doesn't.
-        
-        // Check that the ids are different
+    static add = async ({ prisma, currentUserId }, { followeeId }) => {
 
         const followee = await prisma.user.findOne({where: {id: followeeId}})
 
@@ -21,11 +19,22 @@ module.exports = class Follow {
 
     }
 
-    static remove = async ({ followeeId }, { prisma, currentUserId }) => {
+    static remove = async ({ prisma, currentUserId }, { followeeId }) => {
 
         // Remove the follow if it exists.
 
-        // Return userId of unfollowed
+        const followee = await prisma.user.findOne({where: {id: followeeId}})
 
+        await prisma.user.update({
+            where: {id: currentUserId},
+            data: {
+                following: {
+                    disconnect: [{id: followeeId}]
+                }
+            }
+        })
+
+        return followee
     }
+
 }
