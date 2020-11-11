@@ -34,8 +34,12 @@ module.exports = class User {
         }
     }
 
+    static findById = async (userId, prisma) => {
+        return prisma.user.findOne({where: {id: userId}})
+    }
+
     static current = async ({ currentUserId, prisma }) => {
-        return await prisma.user.findOne({where: {id: currentUserId}})
+        return this.findById(currentUserId, prisma)
     }
 
     static generateToken = (user) => {
@@ -136,6 +140,14 @@ module.exports = class User {
         } else {
             return Track.getFullData({ spotifyApi }, trackIds)
         }
+    }
+
+    static followers = async (user, prisma) => {
+        return await prisma.user.findOne({where: {id: user.id}}).followedBy()
+    }
+
+    static followees = async (user, prisma) => {
+        return await prisma.user.findOne({where: {id: user.id}}).following()
     }
 
     static followerCount = async (user, prisma) => {

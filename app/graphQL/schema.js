@@ -4,6 +4,7 @@ module.exports = `
 
     type Query {
         currentUser: User,
+        findUser(userId: ID!): User
         searchTracks(searchTerm: String!): [Track!]!,
         browseUsers(searchTerm: String): [User!]!
     }

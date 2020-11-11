@@ -16,12 +16,9 @@ module.exports = class Follow {
         })
 
         return followee
-
     }
 
     static remove = async ({ prisma, currentUserId }, { followeeId }) => {
-
-        // Remove the follow if it exists.
 
         const followee = await prisma.user.findOne({where: {id: followeeId}})
 
