@@ -3,7 +3,6 @@ module.exports = `
     scalar Date
 
     type Query {
-        currentUser: User,
         findUser(userId: ID!): User
         searchTracks(searchTerm: String!): [Track!]!,
         browseUsers(searchTerm: String): [User!]!
@@ -20,10 +19,6 @@ module.exports = `
 
         followUser(followeeId: ID!): User,
         unfollowUser(followeeId: ID!): User
-    }
-
-    type Subscription {
-        test: User
     }
 
     type AuthPayload {

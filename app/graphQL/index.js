@@ -6,7 +6,6 @@ const { makeExecutableSchema } = require("graphql-tools");
 
 const QueryResolvers = require('./resolvers/base/query')
 const MutationResolvers = require('./resolvers/base/mutation')
-const SubscriptionResolvers = require('./resolvers/base/subscription')
 
 const DateResolver = require('./resolvers/scalars/date')
 
@@ -18,7 +17,6 @@ const PlaylistResolvers = require('./resolvers/playlist')
 const resolvers = {
     ...QueryResolvers,
     ...MutationResolvers,
-    ...SubscriptionResolvers,
     ...DateResolver,
     ...TrackResolvers,
     ...JamsUpdateResolvers,
@@ -37,6 +35,8 @@ const configureMongo = require('../data/mongo')
 
 const authenticate = require('./authenticate')
 
+const prisma = new PrismaClient()
+
 const context = ({ req }) => {
 
     const currentUserId = authenticate(req)
@@ -45,13 +45,15 @@ const context = ({ req }) => {
     
     const spotifyApi = makeSpotifyApi()
 
+    
+
     if (accessToken) {
         spotifyApi.setAccessToken(accessToken)
     }
 
     return {
         spotifyApi,
-        prisma: new PrismaClient(),
+        prisma,
         mongo: configureMongo(),
         currentUserId
     }

@@ -38,10 +38,6 @@ module.exports = class User {
         return prisma.user.findOne({where: {id: userId}})
     }
 
-    static current = async ({ currentUserId, prisma }) => {
-        return this.findById(currentUserId, prisma)
-    }
-
     static generateToken = (user) => {
         return jwt.sign(
             { userId: user.id },
